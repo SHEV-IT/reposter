@@ -1,4 +1,5 @@
 import json
+import re
 import urllib.request
 from urllib.request import urlopen
 
@@ -16,17 +17,13 @@ respid = respid.split()
 # getting last id post
 position = respid.index("'id':")
 idp = (respid[position + 1])
-idp = idp.replace(',', '')
-idp = idp.replace('}', '')
-idp = idp.replace(']', '')
+idp = re.sub(r'\,|\}|\]', '', idp)
 
 # getting previous id and writing new id
-filename = '/home/wasper/Documents/Python/Projects/reposter/vk_check/last_id.txt'
-pid = open(filename, 'r')
-pid = pid.read()
-file = open(filename, 'w')
-file.write(idp)
-file.close()
+with open('last_id.txt') as f:
+    pid = f.read()
+with open('last_id.txt', 'w') as f:
+    f.write(idp)
 
 idp = int(idp)
 pid = int(pid)
@@ -39,16 +36,14 @@ if(idp - pid != 0):
     pos = rp.index('text')
     text = (rp[pos + 2])
     print(text)
-    fn = '/home/wasper/Documents/Python/Projects/reposter/vk_check/%s.txt' % (idp)
-    file = open(fn, 'w')
-    file.write(text)
-    file.close()
+    with('%s.txt' % (idp), 'w') as w:
+        w.write(text)
 
     # getting image
     c = rp.count('src_big')  # test for image
     if(c > 0):
         pos = rp.index('src_big')
         photol = (rp[pos + 2])
-        urllib.request.urlretrieve("%s" % (photol), "/home/wasper/Documents/Python/Projects/reposter/vk_check/%s.jpg" % (idp))
+        urllib.request.urlretrieve("%s" % (photol), "%s.jpg" % (idp))
 else:
     print('no new posts')
