@@ -3,9 +3,11 @@ import json
 import re
 import urllib.request
 from urllib.request import urlopen
+import constants
 
 # get data from vk.com
-address = 'https://api.vk.com/method/wall.get?owner_id=<here owner id(personal_id or group)>&count=5'
+vk_id = constants.vk_id
+address = 'https://api.vk.com/method/wall.get?owner_id={0}&count=10'.format(vk_id)
 data = urlopen(address)
 decoded_response = data.read().decode()
 final_data = json.loads(decoded_response)
@@ -15,6 +17,7 @@ response = final_data['response'][1:2]
 for resp in response:
     current_id = resp['id']  # getting an id
     text = resp['text']  # getting txt
+
 # getting previous id and writing new id
 with open('last_id.txt') as f:
     prev_id = f.read()
@@ -25,7 +28,7 @@ current_id = int(current_id)  # and now it must be integer
 prev_id = int(prev_id)
 
 # getting post
-if(current_id - prev_id == 0):
+if(current_id - prev_id != 0):
     with open('{0}.txt'.format(current_id), 'w') as t:
         t.write(text)
 
