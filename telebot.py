@@ -1,24 +1,19 @@
-from urllib.request import urlopen
-import urllib.parse
 import requests
 import constants
+import urllib
+import io
 
-# setting constants
-token = constants.token
-chat_id = constants.chat_id
-# reading last id post
-with open('last_id.txt') as f:
-    last_id = f.read()
-# reading last post txt
-with open('{0}.txt'.format(last_id)) as t:
-    text = str(t.read())
-params = urllib.parse.quote(text, safe='')  # formatting text for url
 
-# sending text
-url_send = "https://api.telegram.org/bot{0}/sendmessage?chat_id={1}&text={2}".format(token, chat_id, params)
-urlopen(url_send)
-# sending image
+def tbotxt(text):
+    params = urllib.parse.quote(text, safe='')  # formatting text for url
+    url_send = "https://api.telegram.org/bot{0}/sendmessage?chat_id={1}&text={2}".format(constants.token, constants.chat_id, params)
+    urllib.request.urlopen(url_send)
 
-data = {'chat_id': chat_id}
-files = {'photo': open("{0}.jpg".format(last_id), "rb")}
-requests.post("https://api.telegram.org/bot{0}".format(token) + '/sendPhoto', data=data, files=files)
+
+def tbotimg(url):
+    data = {'chat_id': constants.chat_id}
+    bnr = urllib.request.urlopen(url).read()  # binary response
+    raw = io.BytesIO(bnr)  # raw image
+    raw.name = "bullshit.jpg"  # setting name for image. must have for telegram
+    files = {'photo': io.BufferedReader(raw)}
+    requests.post("https://api.telegram.org/bot{0}".format(constants.token) + '/sendPhoto', data=data, files=files)
