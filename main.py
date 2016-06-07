@@ -1,11 +1,11 @@
 import threading
-import os
+import vk2telegram
 # repeater for our script. check for updates every 5 min
 
 
 def repeater():
     threading.Timer(300.0, repeater).start()
-    os.system('python3 vk_get.py')
+    vk2telegram.vk2telegram()
 
 if __name__ == "__main__":
     repeater()
