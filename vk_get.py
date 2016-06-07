@@ -7,7 +7,7 @@ import constants
 
 # get data from vk.com
 vk_id = constants.vk_id
-adr = 'https://api.vk.com/method/wall.get?owner_id={0}&count=5'.format(vk_id)
+adr = 'https://api.vk.com/method/wall.get?owner_id={0}&count=1'.format(vk_id)
 data = urllib.request.urlopen(adr)
 decoded_response = data.read().decode()
 final_data = json.loads(decoded_response)
@@ -24,17 +24,15 @@ if os.path.exists('last_id.txt'):
 else:
     prev_id = '0'
 with open('last_id.txt', 'w') as f:
-    current_id = str(current_id)  # it must be string
-    f.write(current_id)
+    current_id = str(current_id)  # must be string for writing/generating link
+    f.write(str(current_id))
+or_link = "\nOriginal link https://vk.com/wall" + vk_id + "_" + current_id
 current_id = int(current_id)  # and now it must be integer
 prev_id = int(prev_id)
 
-# getting post
+# sending post
 if(current_id - prev_id != 0):
-    if not text:
-        print("No text in post#{0}".format(current_id))
-    else:
-        telebot.tbotxt(text)  # sending text
+    telebot.tbotxt(text + or_link)  # sending text
     rp = str(resp)
     rp = rp.split()
     c = rp.count("'src_big':")  # test for image
