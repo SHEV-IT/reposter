@@ -26,7 +26,7 @@ def vk_get():
     with open('last_id.txt', 'w') as f:
         current_id = str(current_id)  # must be str for writing/creating link
         f.write(str(current_id))
-    or_link = "\nOriginal link https://vk.com/wall" + vk_id + "_" + current_id
+    or_link = "\nOriginal link https://vk.com/wall{0}_{1}".format(vk_id, current_id)
     current_id = int(current_id)  # and now it must be integer
     prev_id = int(prev_id)
     if(current_id - prev_id != 0):
@@ -34,7 +34,7 @@ def vk_get():
         rp = str(resp)
         rp = rp.split()
         c = rp.count("'src_big':")
-        if(c > 0):
+        if c > 0:
             pos = rp.index("'src_big':")  # getting image url
             url = (rp[pos + 1])
             url = re.sub(r"\'|\,", '', url)
