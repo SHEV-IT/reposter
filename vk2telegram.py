@@ -1,9 +1,9 @@
-import vk_get
+import vk
 import telebot
 
 
 def vk2telegram():
-    response = vk_get.vk_get()
+    response = vk.vk_get()
     if response[0]:
         telebot.tbotxt(response[0])
     if response[1]:
