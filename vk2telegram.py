@@ -8,5 +8,6 @@ def vk2telegram():
         telebot.tbotxt(response[0])
     if response[1]:
         telebot.tbotimg(response[1])
+
 if __name__ == "__main__":
     vk2telegram()

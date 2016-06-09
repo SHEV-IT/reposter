@@ -38,7 +38,6 @@ def vk_get():
             pos = rp.index("'src_big':")  # getting image url
             url = (rp[pos + 1])
             url = re.sub(r"\'|\,", '', url)
-            print(text + url)
             return text, url
         return text, False
     else:
