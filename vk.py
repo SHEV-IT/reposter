@@ -1,14 +1,13 @@
 import os
 import json
-import re
-import urllib
+import urllib.request
 import constants
 
 
 def vk_get():
     # get data from vk.com
     vk_id = constants.vk_id
-    adr = 'https://api.vk.com/method/wall.get?owner_id={0}&count=1'.format(vk_id)
+    adr = 'https://api.vk.com/method/wall.get?owner_id={0}&count=10'.format(vk_id)
     data = urllib.request.urlopen(adr)
     decoded_response = data.read().decode()
     final_data = json.loads(decoded_response)
@@ -17,6 +16,10 @@ def vk_get():
     for resp in response:
         current_id = resp['id']  # getting an id
         text = resp['text']  # getting txt
+        c = 0
+        if 'src_big' in resp:
+            c = 1
+            url = resp['attachments'][0]['photo']['src_big']
     # getting previous id and writing new id
     if os.path.exists('last_id.txt'):
         with open('last_id.txt') as f:
@@ -31,13 +34,7 @@ def vk_get():
     prev_id = int(prev_id)
     if(current_id - prev_id != 0):
         text = text + or_link
-        rp = str(resp)
-        rp = rp.split()
-        c = rp.count("'src_big':")
-        if c > 0:
-            pos = rp.index("'src_big':")  # getting image url
-            url = (rp[pos + 1])
-            url = re.sub(r"\'|\,", '', url)
+        if c == 1:
             return text, url
         return text, False
     else:
