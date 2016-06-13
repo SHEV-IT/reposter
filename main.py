@@ -1,9 +1,10 @@
+"""Main file for repostig."""
 import threading
 import vk2telegram
-# repeater for our script. check for updates every 5 min
 
 
 def repeater():
+    """Repeater for repeating scripts every 5 min."""
     threading.Timer(300.0, repeater).start()
     vk2telegram.vk2telegram()
 
