@@ -2,21 +2,23 @@
 import requests
 import constants
 import urllib
+import urllib.parse
 import io
 
 
-def tbotxt(text):
+def send_txt(text):
     """Sending text to telegram."""
-    params = urllib.parse.quote(text, safe='')  # formatting text for url
-    url_send = (
-        "https://api.telegram.org/bot{0}" +
-        "/sendmessage?chat_id={1}&text={2}").format(
-        constants.token, constants.chat_id, params,
+    url_send = "https://api.telegram.org/bot{}/sendmessage?{}".format(
+        constants.token,
+        urllib.parse.urlencode({
+            "chat_id": constants.chat_id,
+            "text": text
+        })
     )
     urllib.request.urlopen(url_send)
 
 
-def tbotimg(url):
+def send_img(url):
     """Sending image to telegram."""
     data = {'chat_id': constants.chat_id}
     bnr = urllib.request.urlopen(url).read()  # binary response

@@ -4,7 +4,7 @@ import json
 import urllib.request
 
 
-def vk_get(vk_id):
+def get(vk_id):
     """Get data from vk.com."""
     adr = (
         "https://api.vk.com/method" +
